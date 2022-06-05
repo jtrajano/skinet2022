@@ -5,6 +5,7 @@ using Infrastructure.Data;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Core.Interfaces;
 
 namespace API.Controllers
 {
@@ -12,27 +13,50 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        public StoreContext _context { get; }
-        public ProductsController(StoreContext context)
+        private readonly IProductRepository _repository;
+
+        public ProductsController(IProductRepository repository)
         {
-            _context = context;
-            
+            _repository = repository;
+
+
         }
 
-       [HttpGet]
-       public async Task<ActionResult<List<Product>>> GetProducts(){
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
 
-           var products = await _context.Products.ToListAsync();
-           return Ok(products);
-      
-       }
+            var products = await _repository.GetProductsAsync();
+            return Ok(products);
 
-       [HttpGet("{id}")]
-       public async Task<ActionResult<Product>> GetProduct(int id){
+        }
 
-           var product = await _context.Products.FindAsync(id);
-           return Ok(product);
-       }
-      
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+
+            var product = await _repository.GetProductByIdAsync(id);
+            return Ok(product);
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            var productBrands = await _repository.GetProductBrandsAsync();
+
+            return Ok(productBrands);
+
+
+        }
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        {
+            var productTypes = await _repository.GetProductTypesAsync();
+
+            return Ok(productTypes);
+
+
+        }
+
     }
 }
