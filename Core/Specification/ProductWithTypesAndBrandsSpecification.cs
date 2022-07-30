@@ -17,8 +17,7 @@ namespace Core.Specification
                 case "priceAsc":
                     AddOrderBy(p=>p.Price);
                     break;
-                case "priceDesc":
-                    
+                case "priceDesc":          
                     AddOrderByDescending(p=>p.Price);
                     break;
                 default:
