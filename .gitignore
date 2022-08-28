@@ -7,3 +7,5 @@ settings.json
 wwwroot
 publish
 *.rdb
+skinet.*
+
