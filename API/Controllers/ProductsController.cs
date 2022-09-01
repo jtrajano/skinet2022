@@ -8,17 +8,20 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repo;
+        private readonly IGenericRepository<Product> _productRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
 
-        public ProductsController(IProductRepository repo)
+        public ProductsController(IGenericRepository<Product> productRepo, IGenericRepository<ProductBrand> productBrandRepo, IGenericRepository<ProductType> productTypeRepo)
         {
-      
-            _repo = repo;
+            _productRepo = productRepo;
+            _productBrandRepo = productBrandRepo;
+            _productTypeRepo = productTypeRepo;
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id){
 
-            var product = await _repo.GetProduct(id);
+            var product = await _productRepo.GetByIdAsync(id);
 
             return Ok(product);
         }
@@ -26,7 +29,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(){
 
-            var products = await _repo.GetProducts();
+            var products = await _productRepo.ListAllAsync();
 
             return Ok(products);
 
@@ -36,7 +39,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
         {
 
-            var productbrand = await _repo.GetProductBrandsAsync();
+            var productbrand = await _productBrandRepo.ListAllAsync();
 
             return Ok(productbrand);
 
@@ -46,7 +49,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
 
-            var producttype = await _repo.GetProductTypesAsync();
+            var producttype = await _productTypeRepo.ListAllAsync();
 
             return Ok(producttype);
 
