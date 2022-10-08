@@ -9,6 +9,10 @@ namespace Core.Specifications
 {
     public class BaseSpecification<T> : ISpecification<T> where T : BaseEntity
     {
+        public BaseSpecification()
+        {
+            
+        }
         public BaseSpecification(Expression<Func<T, bool>> criteria)
         {
             Criteria = criteria;
