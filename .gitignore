@@ -4,7 +4,6 @@ appsettings.json
 *.db
 settings.json
 .idea
-wwwroot
 publish
 *.rdb
 skinet.*
