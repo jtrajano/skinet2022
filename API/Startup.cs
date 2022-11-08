@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Core.Interfaces;
 using API.Helpers;
 using API.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using API.Errors;
 
 namespace API
 {
@@ -26,9 +28,25 @@ namespace API
             services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(x=>x.UseSqlite(config.GetConnectionString("DefaultConnection")));
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
+            // });
+            services.Configure<ApiBehaviorOptions>(options=>{
+                options.InvalidModelStateResponseFactory = actionContext =>{
+
+                    var errors = actionContext.ModelState
+                    .Where(e=> e.Value.Errors.Count > 0)
+                    .SelectMany(x=>x.Value.Errors)
+                    .Select(x=>x.ErrorMessage).ToArray();
+
+                    var errorResponse = new ApiValidationErrorResponse {
+
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(errorResponse);
+                };
             });
         }
 
