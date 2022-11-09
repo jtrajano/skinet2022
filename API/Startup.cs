@@ -1,11 +1,8 @@
-using Microsoft.OpenApi.Models;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Core.Interfaces;
 using API.Helpers;
 using API.Middleware;
-using Microsoft.AspNetCore.Mvc;
-using API.Errors;
+using API.Extentions;
 
 namespace API
 {
@@ -23,32 +20,12 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductRepository,ProductRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            
             services.AddControllers();
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddDbContext<StoreContext>(x=>x.UseSqlite(config.GetConnectionString("DefaultConnection")));
-           
-            services.Configure<ApiBehaviorOptions>(options=>{
-                options.InvalidModelStateResponseFactory = actionContext =>{
-
-                    var errors = actionContext.ModelState
-                    .Where(e=> e.Value.Errors.Count > 0)
-                    .SelectMany(x=>x.Value.Errors)
-                    .Select(x=>x.ErrorMessage).ToArray();
-
-                    var errorResponse = new ApiValidationErrorResponse {
-
-                        Errors = errors
-                    };
-
-                    return new BadRequestObjectResult(errorResponse);
-                };
-            });
-             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
+            services.AddApplicationServices();
+            services.AddSwaggerDocumentation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,9 +33,7 @@ namespace API
         {
 
             app.UseMiddleware<ExceptionMiddleware>();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
-
+            app.UseSwaggerDocumentation();
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
