@@ -23,7 +23,7 @@ namespace Core.Specifications
             AddInclude(x=>x.ProductBrand);
             AddOrderBy(x=>x.Name);
 
-             if(!string.IsNullOrEmpty(sort))
+            if(!string.IsNullOrEmpty(sort))
             {
                 switch (sort)
                 {
