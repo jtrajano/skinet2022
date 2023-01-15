@@ -8,7 +8,7 @@ namespace Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification:BaseSpecification<Product>
     {
-        
+
         public ProductsWithTypesAndBrandsSpecification(int id): base(x=>x.Id == id)
         {
             AddInclude(x=>x.ProductType);
@@ -18,10 +18,10 @@ namespace Core.Specifications
            
         }
         public ProductsWithTypesAndBrandsSpecification(
-            //string sort, int? brandId, int? typeId
             ProductSpecParams productParams
             )
         : base(x=>
+            (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
             (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
             (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
 
