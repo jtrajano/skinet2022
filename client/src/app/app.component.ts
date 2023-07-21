@@ -8,23 +8,25 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
   title = 'Skinet';
-  products : any[] = [];
+  products: any[]= [];
 
-  constructor(private http:HttpClient){}
+  
+  constructor(private http: HttpClient) { }
+
   ngOnInit(): void {
-    
+
     this.http.get('https://localhost:5000/api/products').subscribe({
-        next: ( response : any ) => this.products = response.data,
-        error: error=> console.log(error),
-        complete: ()=>{
-            console.log('request completed');
-            console.log('extra statement');
-        }
+      next:( response: any ) => this.products = response.data,
+      // next: response=> console.log(response), // what to do next
+      error: error=> console.log(error),// what to do if there is an error
+      complete: ()=>{
+        console.log('request completed');
+        console.log('extra statement');
+      }
     });
 
-
+    
   }
-  
 }

@@ -5,7 +5,7 @@ namespace API.Controllers;
 [ApiController]
 [Route("[controller]")]
 [ApiExplorerSettings(IgnoreApi = true)]
-public class WeatherForecastController : BaseAPIController
+public class WeatherForecastController : BaseApiController
 {
     private static readonly string[] Summaries = new[]
     {
