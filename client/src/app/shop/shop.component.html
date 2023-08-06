@@ -62,8 +62,9 @@
                 previousText="&lsaquo;" 
                 nextText="&rsaquo;" 
                 firstText="&laquo;" 
-                lastText="&raquo;">
- 
+                lastText="&raquo;"
+                (pageChanged)= "onPageChanged($event)"
+                >
                 </pagination>
             </div>
         </section>
