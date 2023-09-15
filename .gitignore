@@ -7,5 +7,11 @@ settings.json
 publish
 *.rdb
 skinet.*
+skinet5.*
+.dtbcache.*
+*.vsidx
+.futdcache.*
+.suo
+*.pubxml
 
 Using+ThenInclude+with+the+specification+pattern.pdf
